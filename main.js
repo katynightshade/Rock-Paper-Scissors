@@ -1,73 +1,85 @@
-const choices = ['rock', 'paper', 'scissors'];
-let userScore = 0;
-let computerScore = 0;
-let results;
-let text;
-let text1;
+const game = () => {
+    let playerScore = 0;
+    let computerScore = 0;
 
-function playerChoice() {
-    let input = prompt('Type rock, paper, or scissors.');
-    while (input == null) {
-        input = prompt('Please type rock, paper, or scissors.');
-    }
-    input = input.toLowerCase();
-    if ((input === 'rock') || (input === 'paper') || (input === 'scissors')) {
-        return input;
-    } else {
-        input = prompt('Invalid input. Please type rock, paper, or scissors.');
-    }
-    return input;
-}
+    function playGame() {
+        const rockBtn = document.querySelector('.rock');
+        const paperBtn = document.querySelector('.paper');
+        const scissorsBtn = document.querySelector('.scissors');
+        const playerOptions = [rockBtn, paperBtn, scissorsBtn];
+        const computerOptions = ['rock', 'paper', 'scissors'];
+        playerOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const randomNumber = Math.floor(Math.random()*computerOptions.length);
+                const computerChoice = computerOptions[randomNumber];
 
-function computerChoice() {
-    return choices[Math.floor(Math.random()*choices.length)];
-}
-
-function playRound(playerSelection, computerSelection) {
-    playerSelection = playerChoice();
-    computerSelection = computerChoice();
-    switch (playerSelection + computerSelection) {
-        case 'scissorspaper':
-        case 'rockscissors':
-        case 'paperrock':
-            text = (`You chose ${playerSelection} and the computer chose ${computerSelection}. You win!`);
-            userScore++;
-            text1 = (`Player Score = ${userScore}; Computer Score = ${computerScore}`);
-            break;
-        case 'paperscissors':
-        case 'scissorsrock':
-        case 'rockpaper':
-            text = (`You chose ${playerSelection} and the computer chose ${computerSelection}. You lose :(`);
-            computerScore++;
-            text1 = (`Player Score = ${userScore}; Computer Score = ${computerScore}`);
-            break;
-        case 'paperpaper':
-        case 'scissorsscissors':
-        case 'rockrock':
-            text = (`You chose ${playerSelection} and the computer chose ${computerSelection}. You tied.`);
-            text1 = (`Player Score = ${userScore}; Computer Score = ${computerScore}`);
-            break;
+                winner(this.innerText, computerChoice);
+                
+                if((playerScore === 5) || (computerScore === 5)) {
+                    gameOver(playerOptions);
+                }
+            })
+        })
     }
-    return { text, text1 };
-}
-
-function scoreKeeper() {
-    if (userScore > computerScore) {
-        results = (`Final Player Score = ${userScore}; Final Computer Score = ${computerScore}. You win!`);
-    } else if (userScore == computerScore) {
-        results = (`Final Player Score = ${userScore}; Final Computer Score = ${computerScore}. You tied!`)
-    } else {
-        results = (`Final Player Score = ${userScore}; Final Computer Score = ${computerScore}. You lose :(`);
+    function winner(player, computer) {
+        const result = document.querySelector('.results');
+        const playerScoreBoard = document.querySelector('.p-score');
+        const computerScoreBoard = document.querySelector('.c-score');
+        player = player.toLowerCase();
+        computer = computer.toLowerCase();
+        switch (player + computer) {
+            case 'scissorspaper':
+            case 'rockscissors':
+            case 'paperrock':
+                result.textContent = (`You chose ${player} and the computer chose ${computer}.`);
+                playerScore++;
+                playerScoreBoard.textContent = playerScore;
+                computerScoreBoard.textContent = computerScore;
+                break;
+            case 'paperscissors':
+            case 'scissorsrock':
+            case 'rockpaper':
+                result.textContent = (`You chose ${player} and the computer chose ${computer}.`);
+                computerScore++;
+                playerScoreBoard.textContent = playerScore;
+                computerScoreBoard.textContent = computerScore;
+                break;
+            case 'paperpaper':
+            case 'scissorsscissors':
+            case 'rockrock':
+                result.textContent = (`You chose ${player} and the computer chose ${computer}.`);
+                playerScoreBoard.textContent = playerScore;
+                computerScoreBoard.textContent = computerScore;
+                break;
+        }
     }
-    return results;
-}
+    function gameOver(playerOptions) {
+        const endGame = document.getElementById('game-over');
+        const results = document.getElementById('final');
+        const reloadBtn = document.getElementById('reload');
 
-function gamePlay() {
-    for (let i = 0; i < 5; i++) {
-        playRound();
-        console.log(text, text1);
+        playerOptions.forEach(option => {
+            option.style.display = 'none';
+        });
+
+        endGame.innerText = 'Game Over!';
+        endGame.style.fontSize = '2rem';
+        if(playerScore > computerScore) {
+            results.style.fontSize = '1.5rem';
+            results.innerText = 'Quick! Get out while you can!';
+        } else if(playerScore < computerScore) {
+            results.style.fontSize = '1.5rem';
+            results.innerText = 'Enjoy your trip through Wonderland...'
+        } else {
+            results.style.fontSize = '1.5rem';
+            results.innerText = 'Try again. Defeat is imminent.'
+        }
+        reloadBtn.innerText = 'Restart the Game';
+        reloadBtn.style.display = 'flex';
+        reloadBtn.addEventListener('click', () => {
+            window.location.reload();
+        })
     }
-    scoreKeeper();
-    return results;
+    playGame();
 }
-console.log(gamePlay());
+game();
