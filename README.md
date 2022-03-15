@@ -1,6 +1,2 @@
 # rock-paper-scissors
-<<<<<<< HEAD
-This project will first demonstrate new skill aquired from JavaScript training through the Odin Project.
-=======
-This project will first demonstrate new skill aquired from JavaScript traing through the Odin Project.
->>>>>>> a1e62e9 (completed javascript for console rps game)
+This project displays use of Javascript learned through the Odin Project and independent research to make the webpage interactive. Responsive CSS is underway as of 3/15/22.
